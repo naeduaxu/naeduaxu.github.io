@@ -19,14 +19,37 @@
 			height: auto;
 			margin: auto;
 		}
+
+		.shadowed {
+			border-radius: 8px;
+			box-shadow: 5px 5px 80px 10px rgba(198, 115, 28, 0.31);
+		}
+
+		.hidden {
+			visibility: hidden;
+		}
 	</style>
+	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			var $box = $("<div>").addClass("absolute-center shadowed").css({"z-index": 1000}).append(
+				$("<h1>").text("coming soon")
+			).append(
+				$("<h1>").append("<img id=sun src=sun.png>")
+			).append(
+				$("<h1>").text("to a browser near you")
+			);
+
+			$("#reveal").click(function(){
+				$box.css({opacity: 0.0});
+				$("body").append($box);
+				$box.animate({opacity: 1.0}, 1000);
+			})
+		});
+	</script>
 </head>
 <body>
-<div class="absolute-center">
-	<h1>coming soon</h1>
-	<h1><img id=sun src="sun.png"></h1>
-	<h1>to a browser near you</h1>
-</div>
-
+	<h1><input type=button name="reveal" id="reveal" value="reveal" style="z-index: 1;"></h1>
 </body>
 </html>
