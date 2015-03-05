@@ -1,0 +1,21 @@
+.absolute-center {
+	/* http://www.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-centering-css */
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	min-width: 1in;
+	min-height: 1in;
+	width: 5in;
+	height: 3in;
+	max-width: 95%;
+	max-height: 95%;
+
+	padding: 1em;
+
+	resize: none;
+	overflow: auto;
+}
