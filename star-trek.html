@@ -109,6 +109,8 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,7vw,56px);lin
 .lead{font-size:14px;color:var(--ink-3);white-space:nowrap}
 .tag{font-size:12px;font-weight:600;padding:1px 8px;border-radius:9px;background:var(--c);color:#000;white-space:nowrap}
 .tag.fav{background:none;--fc:color-mix(in oklab,var(--gold) var(--mix),#000);color:var(--fc);border:1px solid var(--fc)}
+.tag.fmt{border:0;font-weight:500;color:var(--ink-2);background:var(--line)}
+.tag.fmt.anim{color:var(--ink);background:color-mix(in oklab,var(--c) 30%,transparent)}
 .tag.skip{background:none;color:var(--ink-3);border:1px solid var(--ink-3)}
 .meta{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:3px;font-size:14px;color:var(--ink-2)}
 .meta em{font-style:normal;color:var(--ink-3)}
@@ -256,7 +258,7 @@ const ERAS = [
     {t:"The Original Series", lead:"James T. Kirk", story:"2265–69", rel:"1966–69", s:3, e:79, rt:50,
      blurb:"Kirk, Spock and McCoy. Dated production, timeless ideas. A curated best-of list works fine.",
      imdb:"tt0060028", trakt:"star-trek", apple:"https://tv.apple.com/us/show/star-trek-the-original-series/umc.cmc.5howwgk962prd0y3yi928rx5a"},
-    {t:"The Animated Series", lead:"James T. Kirk", story:"2269–70", rel:"1973–74", s:2, e:22, rt:24, skip:true,
+    {t:"The Animated Series", anim:true, lead:"James T. Kirk", story:"2269–70", rel:"1973–74", s:2, e:22, rt:24, skip:true,
      blurb:"Saturday-morning continuation with the original cast's voices.",
      why:"A short 1970s cartoon. Fun trivia, but nothing later depends on it.",
      imdb:"tt0069637", trakt:"star-trek-the-animated-series", apple:"https://tv.apple.com/us/show/star-trek-the-animated-series/umc.cmc.56y2l08h8vfsex0vavk2ynf57"},
@@ -292,10 +294,10 @@ const ERAS = [
       {t:"Insurrection", st:"2375", y:1998, rt:103, imdb:"tt0120844", trakt:"star-trek-insurrection-1998", apple:"https://tv.apple.com/us/movie/star-trek-ix-insurrection/umc.cmc.3zquh6faxkcczwd5lj99c5f23"},
       {t:"Nemesis", st:"2379", y:2002, rt:117, imdb:"tt0253754", trakt:"star-trek-nemesis-2002", apple:"https://tv.apple.com/us/movie/star-trek-x-nemesis/umc.cmc.7083so33nyqipfqj01zlhq39r"}
     ], story:"2371–79"},
-    {t:"Lower Decks", lead:"Carol Freeman", story:"2380–81", rel:"2020–24", rm:8, s:5, e:50, rt:25,
+    {t:"Lower Decks", anim:true, lead:"Carol Freeman", story:"2380–81", rel:"2020–24", rm:8, s:5, e:50, rt:25,
      blurb:"Animated comedy about junior officers. Funnier once you know the franchise.",
      imdb:"tt9184820", trakt:"star-trek-lower-decks", apple:"https://tv.apple.com/us/show/star-trek-lower-decks/umc.cmc.3pcgb865v09usl6nqkoi10gu1"},
-    {t:"Prodigy", lead:"Dal R'El", story:"2383–84", rel:"2021–24", rm:10, s:2, e:40, rt:25,
+    {t:"Prodigy", anim:true, lead:"Dal R'El", story:"2383–84", rel:"2021–24", rm:10, s:2, e:40, rt:25,
      blurb:"Animated adventure about young outsiders who find an abandoned starship. Family-friendly and surprisingly good.",
      imdb:"tt9795876", trakt:"star-trek-prodigy", apple:"https://tv.apple.com/us/show/star-trek-prodigy/umc.cmc.1zqk40gcoayvwt9tai2555wkp"}
   ]},
@@ -327,7 +329,7 @@ const fmtMin = m => `${Math.floor(m/60)} h ${m%60} min`;
 const registry = [];
 
 function tags(it){
-  let h = "";
+  let h = it.anim ? `<span class="tag fmt anim">Animated</span>` : `<span class="tag fmt live">Live action</span>`;
   if (it.fav) h += `<span class="tag fav">Fan favorite</span>`;
   if (it.skip) h += `<span class="tag skip">Often skipped</span>`;
   return h;
@@ -445,7 +447,7 @@ function open(i){
   $("#sh-era").textContent = it.kind === "film" ? `${it.group} · ${it.era.name}` : `${it.era.name}, ${it.era.years}`;
   $("#sh-title").textContent = it.t;
   $("#sh-lead").textContent = it.lead ? `Led by ${it.lead}` : "";
-  let f = "";
+  let f = `<div class="fact"><small>Format</small><span>${it.anim ? "Animated" : "Live action"}</span></div>`;
   if (it.kind === "show"){
     f += `<div class="fact"><small>Seasons</small><span>${it.s}</span></div>`;
     f += `<div class="fact"><small>Episodes</small><span>${it.e}</span></div>`;

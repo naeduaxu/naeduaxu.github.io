@@ -108,6 +108,8 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,7vw,58px);lin
 .lead{font-size:14px;color:var(--ink-3);white-space:nowrap}
 .tag{font-size:12px;font-weight:600;padding:1px 7px;border-radius:4px;white-space:nowrap;background:none}
 .tag.fav{--fc:color-mix(in oklab,var(--gold) var(--mix),#000);color:var(--fc);border:1px solid var(--fc)}
+.tag.fmt{border:0;font-weight:500;color:var(--ink-2);background:var(--line)}
+.tag.fmt.anim{color:var(--ink);background:color-mix(in oklab,var(--c) 30%,transparent)}
 .tag.skip{color:var(--ink-3);border:1px solid var(--ink-3)}
 .meta{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:3px;font-size:14px;color:var(--ink-2)}
 .meta em{font-style:normal;color:var(--ink-3)}
@@ -233,7 +235,7 @@ dialog::backdrop{background:var(--backdrop);-webkit-backdrop-filter:blur(3px);ba
    rm = release month, only used to order titles released the same year */
 const ERAS = [
   {id:"e1", name:"The High Republic", years:"c. 230–130 BBY", c:"var(--hr)", items:[
-    {kind:"show", t:"Young Jedi Adventures", lead:"Kai Brightstar", story:"c. 230 BBY", rel:"2023–25", s:3, e:55, rt:24, rm:5,
+    {kind:"show", t:"Young Jedi Adventures", anim:true, lead:"Kai Brightstar", story:"c. 230 BBY", rel:"2023–25", s:3, e:55, rt:24, rm:5,
      blurb:"Animated adventures of Jedi younglings, made for preschoolers.", skip:true,
      why:"Made for preschoolers. Charming, but nothing else depends on it.",
      imdb:"tt20674124", trakt:"star-wars-young-jedi-adventures", apple:"https://tv.apple.com/us/show/star-wars-young-jedi-adventures/umc.cmc.6qv61jetl7t1zaqvgnwb26rg7"},
@@ -243,7 +245,7 @@ const ERAS = [
      imdb:"tt12262202", trakt:"the-acolyte", apple:"https://tv.apple.com/us/show/the-acolyte/umc.cmc.1alhul5mqpcim20csyvmtv463"}
   ]},
   {id:"e2", name:"Fall of the Jedi", years:"68–19 BBY", c:"var(--foj)", items:[
-    {kind:"show", t:"Tales of the Jedi", lead:"Ahsoka Tano, Count Dooku", story:"68–18 BBY", rel:"2022", s:1, e:6, rt:16, rm:10,
+    {kind:"show", t:"Tales of the Jedi", anim:true, lead:"Ahsoka Tano, Count Dooku", story:"68–18 BBY", rel:"2022", s:1, e:6, rt:16, rm:10,
      blurb:"Six animated shorts: Dooku's slide to the dark side and Ahsoka's early life.",
      imdb:"tt20723374", trakt:"star-wars-tales-of-the-jedi", apple:"https://tv.apple.com/us/show/tales-of-the-jedi/umc.cmc.1y1hxdvwg6ns4vitsodf4wnd3"},
     {kind:"film", t:"Episode I: The Phantom Menace", lead:"Qui-Gon Jinn", story:"32 BBY", y:1999, rt:134,
@@ -252,11 +254,11 @@ const ERAS = [
     {kind:"film", t:"Episode II: Attack of the Clones", lead:"Anakin Skywalker", story:"22 BBY", y:2002, rt:142,
      blurb:"Anakin as a young Jedi, a forbidden romance, and the start of the Clone Wars.",
      imdb:"tt0121765", trakt:"star-wars-episode-ii-attack-of-the-clones-2002", apple:"https://tv.apple.com/us/movie/star-wars-attack-of-the-clones/umc.cmc.27tj6w4r4fpeziazh0cyza2bq"},
-    {kind:"film", t:"The Clone Wars (film)", lead:"Anakin Skywalker, Ahsoka Tano", story:"22 BBY", y:2008, rt:98, skip:true,
+    {kind:"film", t:"The Clone Wars (film)", anim:true, lead:"Anakin Skywalker, Ahsoka Tano", story:"22 BBY", y:2008, rt:98, skip:true,
      blurb:"Animated film that launched the series and introduced Ahsoka.",
      why:"Built from what were planned as the series' first episodes. The show covers the same ground better.",
      imdb:"tt1185834", trakt:"star-wars-the-clone-wars-2008", apple:"https://tv.apple.com/us/movie/star-wars-the-clone-wars/umc.cmc.2zw9bmbdx1b3s0rfixi51s020"},
-    {kind:"show", t:"The Clone Wars", lead:"Anakin Skywalker, Ahsoka Tano", story:"22–19 BBY", rel:"2008–20", s:7, e:133, rt:22, fav:true,
+    {kind:"show", t:"The Clone Wars", anim:true, lead:"Anakin Skywalker, Ahsoka Tano", story:"22–19 BBY", rel:"2008–20", s:7, e:133, rt:22, fav:true,
      blurb:"The war between the prequel films, episode by episode. Uneven early on; brilliant at its best.",
      imdb:"tt0458290", trakt:"star-wars-the-clone-wars", apple:"https://tv.apple.com/us/show/star-wars-the-clone-wars/umc.cmc.pipey73n3wfe96uwbg7eunec"},
     {kind:"film", t:"Episode III: Revenge of the Sith", lead:"Anakin Skywalker", story:"19 BBY", y:2005, rt:140,
@@ -264,16 +266,16 @@ const ERAS = [
      imdb:"tt0121766", trakt:"star-wars-episode-iii-revenge-of-the-sith-2005", apple:"https://tv.apple.com/us/movie/star-wars-revenge-of-the-sith/umc.cmc.5nolvqgurfe17eln52s0b7j6j"}
   ]},
   {id:"e3", name:"Reign of the Empire", years:"19–0 BBY", c:"var(--roe)", items:[
-    {kind:"show", t:"The Bad Batch", lead:"Hunter, Omega", story:"19–18 BBY", rel:"2021–24", s:3, e:47, rt:28,
+    {kind:"show", t:"The Bad Batch", anim:true, lead:"Hunter, Omega", story:"19–18 BBY", rel:"2021–24", s:3, e:47, rt:28,
      blurb:"A squad of defective clones on the run in the Empire's first days.",
      imdb:"tt12708542", trakt:"star-wars-the-bad-batch", apple:"https://tv.apple.com/us/show/star-wars-the-bad-batch/umc.cmc.jzpcwzmyd6h9eaadrakph6ta"},
-    {kind:"show", t:"Tales of the Empire", lead:"Morgan Elsbeth, Barriss Offee", story:"from 19 BBY", rel:"2024", s:1, e:6, rt:15, rm:5,
+    {kind:"show", t:"Tales of the Empire", anim:true, lead:"Morgan Elsbeth, Barriss Offee", story:"from 19 BBY", rel:"2024", s:1, e:6, rt:15, rm:5,
      blurb:"Six animated shorts about two women shaped by the Empire.",
      imdb:"tt32019314", trakt:"star-wars-tales-of-the-empire", apple:"https://tv.apple.com/us/show/star-wars-tales-of-the-empire/umc.cmc.y5p36q221fqcd9792z4tmkef"},
-    {kind:"show", t:"Tales of the Underworld", lead:"Asajj Ventress, Cad Bane", story:"various", rel:"2025", s:1, e:6, rt:15, rm:5,
+    {kind:"show", t:"Tales of the Underworld", anim:true, lead:"Asajj Ventress, Cad Bane", story:"various", rel:"2025", s:1, e:6, rt:15, rm:5,
      blurb:"Six animated shorts following two Clone Wars outlaws.",
      imdb:"tt36414431", trakt:"star-wars-tales-of-the-underworld", apple:"https://tv.apple.com/us/show/star-wars-tales-of-the-underworld/umc.cmc.33dl8owginjayc18l10f2uywx"},
-    {kind:"show", t:"Maul: Shadow Lord", lead:"Maul", story:"c. 18 BBY", rel:"2026", s:1, e:10, rt:25, rm:4,
+    {kind:"show", t:"Maul: Shadow Lord", anim:true, lead:"Maul", story:"c. 18 BBY", rel:"2026", s:1, e:10, rt:25, rm:4,
      blurb:"Animated: the former Sith apprentice builds a criminal empire in the Empire's early years. Season 2 is due in 2027.",
      imdb:"tt36594331", trakt:"star-wars-maul-shadow-lord", apple:"https://tv.apple.com/us/show/star-wars-maul---shadow-lord/umc.cmc.13e9ucuyawm76x5y4pt6qbo61"},
     {kind:"film", t:"Solo", lead:"Han Solo", story:"13–10 BBY", y:2018, rt:135,
@@ -285,7 +287,7 @@ const ERAS = [
     {kind:"show", t:"Andor", lead:"Cassian Andor", story:"5–0 BBY", rel:"2022–25", s:2, e:24, rt:48, rm:9, fav:true,
      blurb:"How an ordinary thief becomes a rebel. A slow-burn political thriller, and many fans' favorite Star Wars of all.",
      imdb:"tt9253284", trakt:"star-wars-andor", apple:"https://tv.apple.com/us/show/andor/umc.cmc.4kyytz4f3hjg64m73887nybli"},
-    {kind:"show", t:"Rebels", lead:"Ezra Bridger", story:"5–0 BBY", rel:"2014–18", s:4, e:75, rt:22,
+    {kind:"show", t:"Rebels", anim:true, lead:"Ezra Bridger", story:"5–0 BBY", rel:"2014–18", s:4, e:75, rt:22,
      blurb:"A ragtag crew and a street kid with the Force in the early Rebellion. Gets much better after season 1.",
      imdb:"tt2930604", trakt:"star-wars-rebels", apple:"https://tv.apple.com/us/show/star-wars-rebels/umc.cmc.29znoughk8bnj2ud456pge0zu"},
     {kind:"film", t:"Rogue One", lead:"Jyn Erso", story:"0 BBY", y:2016, rt:134, fav:true,
@@ -322,7 +324,7 @@ const ERAS = [
      imdb:"tt30825738", trakt:null, apple:"https://tv.apple.com/us/movie/star-wars-the-mandalorian-and-grogu/umc.cmc.31m58rsmdk9f165zgt7vawkxk"}
   ]},
   {id:"e6", name:"Rise of the First Order", years:"34–35 ABY", c:"var(--fo)", items:[
-    {kind:"show", t:"Resistance", lead:"Kazuda Xiono", story:"34 ABY", rel:"2018–20", s:2, e:40, rt:22, skip:true,
+    {kind:"show", t:"Resistance", anim:true, lead:"Kazuda Xiono", story:"34 ABY", rel:"2018–20", s:2, e:40, rt:22, skip:true,
      blurb:"Animated: a young pilot spies on the First Order from an ocean refueling station.",
      why:"A lighter, kid-focused show with little bearing on the films.",
      imdb:"tt8336340", trakt:"star-wars-resistance", apple:"https://tv.apple.com/us/show/star-wars-resistance/umc.cmc.395bn3h2p28luigbpddyd79w6"},
@@ -340,10 +342,10 @@ const ERAS = [
 const ALT = {name:"Outside the timeline", c:"var(--vis)",
   note:"Visions is an anthology of animated shorts by studios around the world, each its own take on Star Wars outside the main story. The Ninth Jedi grew out of one of them.",
   items:[
-    {kind:"show", t:"Visions", lead:"Anthology", story:"—", rel:"2021–25", s:3, e:27, rt:15, rm:9, unit:"volume",
+    {kind:"show", t:"Visions", anim:true, lead:"Anthology", story:"—", rel:"2021–25", s:3, e:27, rt:15, rm:9, unit:"volume",
      blurb:"Self-contained animated shorts, many from Japanese anime studios.",
      imdb:"tt13622982", trakt:"star-wars-visions", apple:"https://tv.apple.com/us/show/star-wars-visions/umc.cmc.1zwnzy1w66okm7kb1f7q073vs"},
-    {kind:"show", t:"Visions Presents: The Ninth Jedi", lead:"Kara", story:"—", rel:"2026", s:1, e:8, rt:28, rm:8,
+    {kind:"show", t:"Visions Presents: The Ninth Jedi", anim:true, lead:"Kara", story:"—", rel:"2026", s:1, e:8, rt:28, rm:8,
      blurb:"A full series expanding one of the most popular Visions shorts.",
      imdb:"tt43337681", trakt:null, apple:"https://tv.apple.com/us/show/star-wars-visions-presents---the-ninth-jedi/umc.cmc.70slqy3zl5r21xorkab29kdvd"}
   ]};
@@ -357,7 +359,7 @@ const plural = (n, w) => `${n} ${w}${n===1?"":"s"}`;
 const registry = [];
 
 function tags(it){
-  let h = "";
+  let h = it.anim ? `<span class="tag fmt anim">Animated</span>` : `<span class="tag fmt live">Live action</span>`;
   if (it.fav) h += `<span class="tag fav">Fan favorite</span>`;
   if (it.skip) h += `<span class="tag skip">Often skipped</span>`;
   return h;
@@ -448,7 +450,7 @@ function open(i){
   $("#sh-era").textContent = `${it.era.name}${it.era.years ? ", " + it.era.years : ""}`;
   $("#sh-title").textContent = it.t;
   $("#sh-lead").textContent = it.lead && it.lead !== "Anthology" ? `Led by ${it.lead}` : "";
-  let f = "";
+  let f = `<div class="fact"><small>Format</small><span>${it.anim ? "Animated" : "Live action"}</span></div>`;
   if (it.kind === "show"){
     f += `<div class="fact"><small>${it.unit ? "Volumes" : "Seasons"}</small><span>${it.s}</span></div>`;
     f += `<div class="fact"><small>Episodes</small><span>${it.e}</span></div>`;
