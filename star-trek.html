@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2f3f6" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Star Trek Watch Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;600;700&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#000;
+  --sheet:#14110e;
+  --press:#1a1612;
+  --backdrop:rgba(0,0,0,.7);
+  --mix:100%;
+  --title:#ffc890;
+  --ink:#f3e7d6;
+  --ink-2:#b9ab98;
+  --ink-3:#7d7366;
+  --line:#2a2622;
+  --panel:#100e0c;
+  --orange:#ff9c3f;
+  --peach:#ffc890;
+  --lilac:#c99ad8;
+  --blue:#8f9cff;
+  --gold:#f2c14e;
+  --sky:#6fc3e8;
+  --red:#e0685e;
+  --display:"Antonio","Arial Narrow","Roboto Condensed",sans-serif;
+  --text:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --gl:max(16px,env(safe-area-inset-left));
+  --gr:max(16px,env(safe-area-inset-right));
+}
+@media (prefers-color-scheme: light){
+  :root{
+    color-scheme:light;
+    --bg:#f2f3f6;
+    --sheet:#ffffff;
+    --panel:#e7e9ef;
+    --press:#dcdfe7;
+    --line:#d7d9e0;
+    --ink:#17171c;
+    --ink-2:#4b4c57;
+    --ink-3:#727482;
+    --backdrop:rgba(25,25,35,.35);
+    --mix:55%;
+    --title:color-mix(in oklab,#ff9c3f 62%,#000);
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);transition:background-color .2s,color .2s;color:var(--ink);font-family:var(--text);font-size:16px;line-height:1.4}
+a{color:inherit}
+button{font:inherit;color:inherit}
+
+/* ---------- frame ---------- */
+.wrap{max-width:920px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) var(--gr) calc(env(safe-area-inset-bottom) + 32px) var(--gl)}
+.top{display:grid;grid-template-columns:30px 1fr;grid-template-rows:auto auto;column-gap:8px}
+.elbow{grid-row:1/3;background:var(--orange);border-radius:30px 0 0 0;position:relative}
+.topbar{display:flex;gap:6px;height:22px}
+.topbar i{display:block;height:100%;border-radius:0 11px 11px 0}
+.topbar i:nth-child(1){flex:5;background:var(--orange);border-radius:0}
+.topbar i:nth-child(2){flex:1;background:var(--peach);border-radius:0}
+.topbar i:nth-child(3){flex:2;background:var(--lilac)}
+.head{padding:14px 0 20px 6px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,7vw,56px);line-height:1;margin:0;letter-spacing:.01em;color:var(--title)}
+.sub{margin:8px 0 0;color:var(--ink-2);font-size:15px;max-width:60ch}
+
+/* ---------- sort switch ---------- */
+.sorter{display:grid;grid-template-columns:30px 1fr;column-gap:8px;margin:0 0 14px}
+.seg{display:inline-flex;gap:4px;justify-self:start;margin-left:6px}
+.seg button{font-family:var(--display);font-weight:600;font-size:17px;height:40px;padding:0 18px;white-space:nowrap;border:2px solid var(--orange);background:none;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.seg button:first-child{border-radius:20px 0 0 20px}
+.seg button:last-child{border-radius:0 20px 20px 0}
+.seg button[aria-pressed="true"]{background:var(--orange);color:#000}
+.seg button:focus-visible{outline:2px solid var(--title);outline-offset:2px}
+
+/* ---------- column header (wide only) ---------- */
+.cols{display:none}
+
+/* ---------- eras ---------- */
+.era{display:grid;grid-template-columns:30px 1fr;column-gap:8px;margin-top:6px}
+.era-bar{background:var(--c);border-radius:16px 0 0 0}
+.era-body{min-width:0}
+/* era header = horizontal band joined to the left bar, label inside */
+.era-head{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;min-height:26px;margin:0 0 14px -8px;padding:3px 14px 3px 12px;background:var(--c);border-radius:0 13px 13px 0;color:#000}
+.era-head.yrs{grid-template-columns:minmax(0,1fr) auto minmax(max-content,1fr)}
+.era-head.yrs small{white-space:nowrap}
+.era-head::after{content:"";position:absolute;left:0;top:100%;width:14px;height:14px;background:radial-gradient(circle at 100% 100%,transparent 13.5px,var(--c) 14px)}
+.era-head h2{grid-column:2;text-align:center;font-family:var(--display);font-weight:600;font-size:17px;margin:0;line-height:1.1;color:#000}
+.era-head small{font-size:13px;font-weight:500;font-family:var(--text);color:rgba(0,0,0,.62);grid-column:3;justify-self:end;text-align:right;line-height:1.2}
+
+/* ---------- rows ---------- */
+.row{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 4px 10px 6px;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--panel)}
+.row:focus-visible{outline:2px solid var(--title);outline-offset:-2px;border-radius:6px}
+.row:active{background:var(--press)}
+.t{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.name{font-family:var(--display);font-weight:600;font-size:20px;line-height:1.15;color:var(--ink)}
+.lead{font-size:14px;color:var(--ink-3);white-space:nowrap}
+.tag{font-size:12px;font-weight:600;padding:1px 8px;border-radius:9px;background:var(--c);color:#000;white-space:nowrap}
+.tag.fav{background:none;--fc:color-mix(in oklab,var(--gold) var(--mix),#000);color:var(--fc);border:1px solid var(--fc)}
+.tag.skip{background:none;color:var(--ink-3);border:1px solid var(--ink-3)}
+.meta{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:3px;font-size:14px;color:var(--ink-2)}
+.meta em{font-style:normal;color:var(--ink-3)}
+.meta .rel{color:var(--ink)}
+.grouplabel{font-size:13px;color:var(--ink-3);padding:10px 0 2px 6px}
+.films{border-left:3px solid var(--c);margin-left:6px}
+.films .row{padding-left:12px}
+.films .name{font-size:18px}
+
+.note{margin:22px 0 0;display:grid;grid-template-columns:30px 1fr;column-gap:8px}
+.note .era-bar{background:none;border:2px dashed var(--c);border-right:0}
+.note p{margin:4px 0 8px 6px;color:var(--ink-2);font-size:14px;max-width:62ch}
+.foot{display:grid;grid-template-columns:30px 1fr;column-gap:8px;margin-top:22px}
+.foot .elbow-b{background:var(--lilac);border-radius:0 0 0 30px;height:44px}
+.foot .bar{display:flex;gap:6px;align-self:end;height:22px}
+.foot .bar i{display:block;height:100%}
+.foot .bar i:nth-child(1){flex:4;background:var(--lilac)}
+.foot .bar i:nth-child(2){flex:1;background:var(--blue);border-radius:0 11px 11px 0}
+.fine{margin:10px 0 0 38px;font-size:12px;color:var(--ink-3)}
+
+/* ---------- popup ---------- */
+dialog{border:0;padding:0;background:transparent;color:var(--ink);max-width:none;max-height:none;width:100%;height:100%;margin:0}
+dialog::backdrop{background:var(--backdrop);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sheet-wrap{position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;background:var(--sheet);border-top:4px solid var(--c);border-radius:22px 22px 0 0;padding:18px var(--gr) calc(env(safe-area-inset-bottom) + 18px) var(--gl);max-height:90vh;overflow:auto;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sh-era{font-size:13px;color:color-mix(in oklab,var(--c) var(--mix),#000);font-weight:600}
+.sh-title{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.05;margin:2px 0 0;color:var(--title)}
+.sh-lead{margin-top:4px;font-size:15px;color:var(--ink-2)}
+.close{flex:none;width:36px;height:36px;border-radius:18px;border:1px solid var(--ink-3);background:none;cursor:pointer;font-size:20px;line-height:1}
+.close:focus-visible{outline:2px solid var(--title);outline-offset:2px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:14px 0 6px}
+.fact{background:var(--bg);border-radius:10px;padding:8px 10px}
+.fact small{display:block;font-size:12px;color:var(--ink-3)}
+.fact span{font-family:var(--display);font-size:20px;font-weight:600;white-space:nowrap}
+.blurb{color:var(--ink-2);font-size:15px;margin:10px 0 14px}
+.why{margin:-4px 0 14px;padding:8px 12px;border-left:3px solid var(--ink-3);background:var(--bg);border-radius:0 8px 8px 0;color:var(--ink-2);font-size:15px}
+.why b{color:var(--ink);font-weight:600}
+.links{display:grid;gap:8px}
+.lk{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:#000;font-family:var(--display);font-weight:600;font-size:20px;height:52px;padding:0 20px;border-radius:26px;background:var(--lc)}
+.lk small{font-family:var(--text);font-weight:500;font-size:13px;opacity:.75}
+.lk:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.lk.apple{--lc:var(--orange)}
+.lk.imdb{--lc:var(--gold)}
+.lk.trakt{--lc:var(--lilac)}
+.lk.off{opacity:.45;pointer-events:none}
+
+/* ---------- wide / landscape ---------- */
+@media (min-width:700px){
+  .row,.cols div{display:grid;grid-template-columns:minmax(0,1fr) 128px 74px 82px 82px;align-items:center;column-gap:12px;padding:9px 8px 9px 10px}
+  .meta{display:contents}
+  .meta>span{white-space:nowrap;font-variant-numeric:tabular-nums}
+  .meta .m-rt,.meta .m-story,.meta .m-rel{text-align:right}
+  .meta em{display:none}
+  .cols{display:grid;grid-template-columns:30px 1fr;column-gap:8px;margin-bottom:2px}
+  .cols div{padding-top:0;padding-bottom:0;font-size:12px;color:var(--ink-3)}
+  .cols div span:nth-child(n+3){text-align:right}
+  .films .row{padding-left:13px}
+  .sheet-wrap{align-items:center}
+  .sheet{border-radius:22px;border-top:0;border-left:6px solid var(--c);padding:22px 24px 24px}
+}
+@media (min-width:700px) and (max-height:500px){
+  /* phone landscape: shorter sheet, links side by side */
+  .sheet{max-width:720px}
+  .links{grid-template-columns:repeat(3,1fr)}
+  .lk{flex-direction:column;justify-content:center;gap:0;height:58px;padding:0 10px}
+  .facts{margin:10px 0 8px;grid-template-columns:repeat(auto-fit,minmax(88px,1fr))}
+  .fact span{font-size:18px}
+  .blurb{display:none}
+}
+@media (max-width:699px){.meta>span:empty{display:none}
+  .seg button{font-size:15px;padding:0 12px;height:38px}}
+@media (max-width:380px){
+  .top,.era,.note,.foot,.sorter{grid-template-columns:22px 1fr}
+  .seg button{padding:0 10px;font-size:14px}
+  .elbow{border-radius:22px 0 0 0}
+  .fine{margin-left:30px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="elbow" aria-hidden="true"></div>
+    <div class="topbar" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="head">
+      <h1>Star Trek watch guide</h1>
+      <p class="sub">Every series and film, in story or release order. Tap any title for IMDb, Trakt, or to open it in the Apple TV app.</p>
+    </div>
+  </header>
+
+  <div class="sorter"><span aria-hidden="true"></span>
+    <div class="seg" role="group" aria-label="Sort order">
+      <button type="button" data-mode="story" aria-pressed="true">Story order</button>
+      <button type="button" data-mode="release" aria-pressed="false">Release order</button>
+    </div>
+  </div>
+
+  <div class="cols" aria-hidden="true"><span></span><div><span>Title</span><span>Seasons, episodes</span><span>Length</span><span>Story</span><span>Released</span></div></div>
+
+  <main id="timeline"></main>
+
+  <section class="note" id="alt"></section>
+
+  <footer class="foot" aria-hidden="true"><div class="elbow-b"></div><div class="bar"><i></i><i></i></div></footer>
+  <p class="fine">Runtimes are typical episode lengths; total hours are approximate. Story years follow the usual fan chronology.</p>
+</div>
+
+<dialog id="pop" aria-labelledby="sh-title">
+  <div class="sheet-wrap" id="sheetWrap">
+    <div class="sheet" id="sheet">
+      <div class="sh-top">
+        <div><div class="sh-era" id="sh-era"></div><h3 class="sh-title" id="sh-title"></h3><div class="sh-lead" id="sh-lead"></div></div>
+        <button class="close" id="close" aria-label="Close">×</button>
+      </div>
+      <div class="facts" id="sh-facts"></div>
+      <p class="blurb" id="sh-blurb"></p>
+      <p class="why" id="sh-why"><b>Often skipped.</b> <span></span></p>
+      <div class="links">
+        <a class="lk apple" id="lk-apple" target="_blank" rel="noopener">Apple TV <small>Open in TV app</small></a>
+        <a class="lk imdb" id="lk-imdb" target="_blank" rel="noopener">IMDb <small>Ratings, cast</small></a>
+        <a class="lk trakt" id="lk-trakt" target="_blank" rel="noopener">Trakt <small>Track progress</small></a>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* ===== DATA ===== */
+const ERAS = [
+  {id:"e1", name:"22nd century", years:"2150s", c:"var(--blue)", items:[
+    {t:"Enterprise", lead:"Jonathan Archer", story:"2151–55", rel:"2001–05", s:4, e:98, rt:43,
+     blurb:"Earth's first warp-5 starship, a century before Kirk. Slow first two seasons; season 4 is the strongest.",
+     imdb:"tt0244365", trakt:"star-trek-enterprise", apple:"https://tv.apple.com/us/show/star-trek-enterprise/umc.cmc.10fdo1qpaj8u46zk0bo082gc7"}
+  ]},
+  {id:"e2", name:"23rd century", years:"2250s–2290s", c:"var(--orange)", items:[
+    {t:"Discovery, seasons 1–2", lead:"Michael Burnham", story:"2256–58", rel:"2017–19", s:2, e:29, rt:50,
+     blurb:"Serialized story around Michael Burnham during the Klingon war. Season 2 introduces this version of Pike and Spock.",
+     imdb:"tt5171438", trakt:"star-trek-discovery", apple:"https://tv.apple.com/us/show/star-trek-discovery/umc.cmc.5ge1cirmxod01u8f8m3rplx5g"},
+    {t:"Strange New Worlds", lead:"Christopher Pike", story:"2259–", rel:"2022–", s:4, e:40, rt:52, fav:true,
+     blurb:"Captain Pike, Spock and Number One on the Enterprise, one adventure per episode. A final six-episode season 5 is still to come.",
+     imdb:"tt12327578", trakt:"star-trek-strange-new-worlds", apple:"https://tv.apple.com/us/show/star-trek-strange-new-worlds/umc.cmc.1o10sclnk0t945h2mtuolocip"},
+    {t:"The Original Series", lead:"James T. Kirk", story:"2265–69", rel:"1966–69", s:3, e:79, rt:50,
+     blurb:"Kirk, Spock and McCoy. Dated production, timeless ideas. A curated best-of list works fine.",
+     imdb:"tt0060028", trakt:"star-trek", apple:"https://tv.apple.com/us/show/star-trek-the-original-series/umc.cmc.5howwgk962prd0y3yi928rx5a"},
+    {t:"The Animated Series", lead:"James T. Kirk", story:"2269–70", rel:"1973–74", s:2, e:22, rt:24, skip:true,
+     blurb:"Saturday-morning continuation with the original cast's voices.",
+     why:"A short 1970s cartoon. Fun trivia, but nothing later depends on it.",
+     imdb:"tt0069637", trakt:"star-trek-the-animated-series", apple:"https://tv.apple.com/us/show/star-trek-the-animated-series/umc.cmc.56y2l08h8vfsex0vavk2ynf57"},
+    {group:"Original crew movies", lead:"James T. Kirk", films:[
+      {t:"The Motion Picture", st:"2273", y:1979, rt:132, imdb:"tt0079945", trakt:"star-trek-the-motion-picture-1979", apple:"https://tv.apple.com/us/movie/star-trek-the-motion-picture/umc.cmc.74uz08o8aeuy5jav1j7q8ml7b"},
+      {t:"The Wrath of Khan", st:"2285", y:1982, rt:113, fav:true, imdb:"tt0084726", trakt:"star-trek-ii-the-wrath-of-khan-1982", apple:"https://tv.apple.com/us/movie/star-trek-ii-the-wrath-of-khan/umc.cmc.3louhyc2uuswb7fpm9n3fog51"},
+      {t:"The Search for Spock", st:"2285", y:1984, rt:105, imdb:"tt0088170", trakt:"star-trek-iii-the-search-for-spock-1984", apple:"https://tv.apple.com/us/movie/star-trek-iii-the-search-for-spock/umc.cmc.7k68kfi3iqlyzgw94drtmhxqx"},
+      {t:"The Voyage Home", st:"2286", y:1986, rt:119, imdb:"tt0092007", trakt:"star-trek-iv-the-voyage-home-1986", apple:"https://tv.apple.com/us/movie/star-trek-iv-the-voyage-home/umc.cmc.60sgpu17ghb4kal0yh4y5wudx"},
+      {t:"The Final Frontier", st:"2287", y:1989, rt:106, skip:true, why:"Widely considered the weakest original-crew movie, and The Undiscovered Country doesn't require it.", imdb:"tt0098382", trakt:"star-trek-v-the-final-frontier-1989", apple:"https://tv.apple.com/us/movie/star-trek-v-the-final-frontier/umc.cmc.2oow7kmxqbifct4allge36mvf"},
+      {t:"The Undiscovered Country", st:"2293", y:1991, rt:110, imdb:"tt0102975", trakt:"star-trek-vi-the-undiscovered-country-1991", apple:"https://tv.apple.com/us/movie/star-trek-vi-the-undiscovered-country/umc.cmc.3f31ie9f35bmily7sokbdl25d"}
+    ], story:"2273–93"}
+  ]},
+  {id:"e25", name:"Early 24th century", years:"2320s", c:"var(--peach)", items:[
+    {group:"Streaming movie", lead:"Philippa Georgiou", films:[
+      {t:"Section 31", st:"2324", y:2025, rt:95, skip:true, imdb:"tt9603060", trakt:"star-trek-section-31-2025", apple:"https://tv.apple.com/us/movie/star-trek-section-31/umc.cmc.2qo6svome1zp6bjeo4sdm1g6c",
+       blurb:"Spy thriller with Michelle Yeoh, set in 2324.",
+       why:"Poorly received, and it stands apart from the main storyline."}
+    ], story:"2324"}
+  ]},
+  {id:"e3", name:"Late 24th century", years:"2360s–2380s", c:"var(--lilac)", items:[
+    {t:"The Next Generation", lead:"Jean-Luc Picard", story:"2364–70", rel:"1987–94", s:7, e:178, rt:45, fav:true,
+     blurb:"Captain Picard's Enterprise-D. Seasons 1–2 are rough; it hits its stride from season 3.",
+     imdb:"tt0092455", trakt:"star-trek-the-next-generation", apple:"https://tv.apple.com/us/show/star-trek-the-next-generation/umc.cmc.3xfdqq5108iysguntm4y3wklc"},
+    {t:"Deep Space Nine", lead:"Benjamin Sisko", story:"2369–75", rel:"1993–99", s:7, e:176, rt:45, fav:true,
+     blurb:"A space station at the edge of a war. The most serialized of the classic shows.",
+     imdb:"tt0106145", trakt:"star-trek-deep-space-nine", apple:"https://tv.apple.com/us/show/star-trek-deep-space-nine/umc.cmc.6xuvq2wsnm99d8ne71pqo3q30"},
+    {t:"Voyager", lead:"Kathryn Janeway", story:"2371–78", rel:"1995–2001", s:7, e:172, rt:45,
+     blurb:"A ship flung across the galaxy, 70 years from home.",
+     imdb:"tt0112178", trakt:"star-trek-voyager", apple:"https://tv.apple.com/us/show/star-trek-voyager/umc.cmc.3nelr2c27ahdxh47xw68p0o04"},
+    {group:"Next Generation movies", lead:"Jean-Luc Picard", films:[
+      {t:"Generations", st:"2293, 2371", y:1994, rt:118, imdb:"tt0111280", trakt:"star-trek-generations-1994", apple:"https://tv.apple.com/us/movie/star-trek-vii-generations/umc.cmc.mn5cpchxt5ygvhkmlnkb4twf"},
+      {t:"First Contact", st:"2373", y:1996, rt:111, fav:true, imdb:"tt0117731", trakt:"star-trek-first-contact-1996", apple:"https://tv.apple.com/us/movie/star-trek-viii-first-contact/umc.cmc.4uyaqs81knrnkhbej5kjokx8w"},
+      {t:"Insurrection", st:"2375", y:1998, rt:103, imdb:"tt0120844", trakt:"star-trek-insurrection-1998", apple:"https://tv.apple.com/us/movie/star-trek-ix-insurrection/umc.cmc.3zquh6faxkcczwd5lj99c5f23"},
+      {t:"Nemesis", st:"2379", y:2002, rt:117, imdb:"tt0253754", trakt:"star-trek-nemesis-2002", apple:"https://tv.apple.com/us/movie/star-trek-x-nemesis/umc.cmc.7083so33nyqipfqj01zlhq39r"}
+    ], story:"2371–79"},
+    {t:"Lower Decks", lead:"Carol Freeman", story:"2380–81", rel:"2020–24", rm:8, s:5, e:50, rt:25,
+     blurb:"Animated comedy about junior officers. Funnier once you know the franchise.",
+     imdb:"tt9184820", trakt:"star-trek-lower-decks", apple:"https://tv.apple.com/us/show/star-trek-lower-decks/umc.cmc.3pcgb865v09usl6nqkoi10gu1"},
+    {t:"Prodigy", lead:"Dal R'El", story:"2383–84", rel:"2021–24", rm:10, s:2, e:40, rt:25,
+     blurb:"Animated adventure about young outsiders who find an abandoned starship. Family-friendly and surprisingly good.",
+     imdb:"tt9795876", trakt:"star-trek-prodigy", apple:"https://tv.apple.com/us/show/star-trek-prodigy/umc.cmc.1zqk40gcoayvwt9tai2555wkp"}
+  ]},
+  {id:"e4", name:"Turn of the 25th century", years:"2399–2402", c:"var(--gold)", items:[
+    {t:"Picard", lead:"Jean-Luc Picard", story:"2399–2402", rel:"2020–23", rm:1, s:3, e:30, rt:55,
+     blurb:"Jean-Luc Picard in retirement and back in action. Season 3 is a beloved Next Generation reunion.",
+     imdb:"tt8806524", trakt:"star-trek-picard", apple:"https://tv.apple.com/us/show/star-trek-picard/umc.cmc.2tqufhly635jf1fnuonxojax"}
+  ]},
+  {id:"e5", name:"32nd century", years:"3180s–3190s", c:"var(--sky)", items:[
+    {t:"Discovery, seasons 3–5", lead:"Michael Burnham", story:"3188–91", rel:"2020–24", rm:10, s:3, e:36, rt:55,
+     blurb:"The crew jumps 930 years ahead into a fractured galaxy.",
+     imdb:"tt5171438", trakt:"star-trek-discovery", apple:"https://tv.apple.com/us/show/star-trek-discovery/umc.cmc.5ge1cirmxod01u8f8m3rplx5g"},
+    {t:"Starfleet Academy", lead:"Nahla Ake", story:"3190s", rel:"2026–", s:1, e:10, rt:50,
+     blurb:"Cadets in training at the reopened Academy, led by Holly Hunter's chancellor. Season 2, the last, is due in March 2027.",
+     imdb:"tt8622160", trakt:null, traktSearch:"Star Trek Starfleet Academy", apple:"https://tv.apple.com/us/show/star-trek-starfleet-academy/umc.cmc.39ujsorzscjubwo9m4ljd4oxh"}
+  ]}
+];
+const ALT = {name:"Alternate timeline", lead:"James T. Kirk", note:"The reboot films take place in a separate timeline that splits off in 2233, so they don't sit on the main line.", c:"var(--red)", films:[
+  {t:"Star Trek", st:"2258", y:2009, rt:127, imdb:"tt0796366", trakt:"star-trek-2009", apple:"https://tv.apple.com/us/movie/star-trek/umc.cmc.1qfm0vxptnl42u4jclqwbtxt9"},
+  {t:"Star Trek Into Darkness", st:"2259", y:2013, rt:132, imdb:"tt1408101", trakt:"star-trek-into-darkness-2013", apple:"https://tv.apple.com/us/movie/star-trek-into-darkness/umc.cmc.4rkplfpq4y0zbyxr3xolm5kvf"},
+  {t:"Star Trek Beyond", st:"2263", y:2016, rt:122, imdb:"tt2660888", trakt:"star-trek-beyond-2016", apple:"https://tv.apple.com/us/movie/star-trek-beyond/umc.cmc.5wssqlk617t7jjmhn23v7q4pk"}
+]};
+
+/* ===== RENDER ===== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const hrs = (e, rt) => Math.round(e * rt / 60);
+const fmtMin = m => `${Math.floor(m/60)} h ${m%60} min`;
+const registry = [];
+
+function tags(it){
+  let h = "";
+  if (it.fav) h += `<span class="tag fav">Fan favorite</span>`;
+  if (it.skip) h += `<span class="tag skip">Often skipped</span>`;
+  return h;
+}
+function showRow(it, era){
+  const i = registry.push({...it, era, kind:"show"}) - 1;
+  return `<button class="row show" data-i="${i}" style="--c:${era.c}">
+        <span class="t"><span class="name">${esc(it.t)}</span><span class="lead">${esc(it.lead)}</span>${tags(it)}</span>
+    <span class="meta">
+      <span class="m-eps">${it.s} season${it.s>1?"s":""}, ${it.e} eps</span>
+      <span class="m-rt">~${it.rt} min<em> each, ~${hrs(it.e,it.rt)} h total</em></span>
+      <span class="m-story"><em>Story </em>${it.story}</span>
+      <span class="m-rel rel"><em>Released </em>${it.rel}</span>
+    </span></button>`;
+}
+function filmRow(f, era, groupName){
+  const i = registry.push({...f, era, kind:"film", group:groupName}) - 1;
+  return `<button class="row film" data-i="${i}" style="--c:${era.c}">
+        <span class="t"><span class="name">${esc(f.t)}</span><span class="lead">${esc(f.lead)}</span>${tags(f)}</span>
+    <span class="meta">
+      <span class="m-eps">Movie</span>
+      <span class="m-rt">${fmtMin(f.rt)}</span>
+      <span class="m-story"><em>Story </em>${f.st}</span>
+      <span class="m-rel rel"><em>Released </em>${f.y}</span>
+    </span></button>`;
+}
+const DECADES = {
+  1960:["The original run","var(--orange)"], 1970:["Animation and the first film","var(--peach)"],
+  1980:["The films and a new generation","var(--lilac)"], 1990:["Trek on TV at its peak","var(--blue)"],
+  2000:["A prequel, a farewell, a reboot","var(--gold)"], 2010:["Reboot films and streaming","var(--sky)"],
+  2020:["The streaming era","var(--red)"]
+};
+let mode = "story";
+function render(){
+  registry.length = 0;
+  if (mode === "release") return renderRelease();
+  $("#alt").hidden = false;
+  let h = "";
+  for (const era of ERAS){
+    h += `<section class="era" style="--c:${era.c}" aria-labelledby="${era.id}">
+      <div class="era-bar" aria-hidden="true"></div>
+      <div class="era-body">
+        <div class="era-head yrs"><h2 id="${era.id}">${esc(era.name)}</h2><small>${era.years}</small></div>`;
+    for (const it of era.items){
+      if (it.group){
+        h += `<div class="grouplabel">${esc(it.group)}, story ${it.story}</div><div class="films">`;
+        for (const f of it.films) h += filmRow({lead:it.lead, ...f}, era, it.group);
+        h += `</div>`;
+      } else h += showRow(it, era);
+    }
+    h += `</div></section>`;
+  }
+  $("#timeline").innerHTML = h;
+
+  const altEra = {name:ALT.name, years:"from 2233", c:ALT.c};
+  let a = `<div class="era-bar" aria-hidden="true" style="--c:${ALT.c}"></div><div class="era-body" style="--c:${ALT.c}">
+    <div class="era-head"><h2>${ALT.name}</h2><small>splits off in 2233</small></div>
+    <p>${esc(ALT.note)}</p><div class="films">`;
+  for (const f of ALT.films) a += filmRow({lead:ALT.lead, ...f}, altEra, "Reboot films");
+  a += `</div></div>`;
+  $("#alt").innerHTML = a;
+}
+function renderRelease(){
+  const all = [];
+  for (const era of ERAS) for (const it of era.items){
+    if (it.group) for (const f of it.films) all.push({kind:"film", it:{lead:it.lead, ...f}, era, group:it.group, key:f.y});
+    else all.push({kind:"show", it, era, key:parseInt(it.rel) + (it.rm||0)/12});
+  }
+  const altEra = {name:ALT.name, years:"from 2233", c:ALT.c};
+  for (const f of ALT.films) all.push({kind:"film", it:{lead:ALT.lead, ...f}, era:altEra, group:"Reboot films", key:f.y});
+  all.sort((a,b) => a.key - b.key);
+  let h = "", cur = null;
+  for (const x of all){
+    const dec = Math.floor(x.key/10)*10;
+    if (dec !== cur){
+      if (cur !== null) h += `</div></section>`;
+      cur = dec;
+      const [desc, c] = DECADES[dec];
+      h += `<section class="era" style="--c:${c}" aria-labelledby="d${dec}">
+        <div class="era-bar" aria-hidden="true"></div>
+        <div class="era-body"><div class="era-head"><h2 id="d${dec}">${dec}s</h2><small>${desc}</small></div>`;
+    }
+    h += x.kind === "show" ? showRow(x.it, x.era) : filmRow(x.it, x.era, x.group);
+  }
+  h += `</div></section>`;
+  $("#timeline").innerHTML = h;
+  $("#alt").hidden = true;
+}
+function setMode(m, save){
+  mode = m === "release" ? "release" : "story";
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+  render();
+  if (save){
+    try { localStorage.setItem("trek-sort", mode); } catch(e){}
+    history.replaceState(null, "", mode === "release" ? "#release-order" : location.pathname + location.search);
+  }
+}
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode, true)));
+
+/* ===== POPUP ===== */
+const pop = $("#pop");
+function setLink(el, url){
+  if (url){ el.href = url; el.classList.remove("off"); el.removeAttribute("aria-disabled"); }
+  else { el.removeAttribute("href"); el.classList.add("off"); el.setAttribute("aria-disabled","true"); }
+}
+function appleUrl(it){
+  if (it.apple) return it.apple;
+  const q = it.kind === "film" ? `Star Trek ${it.t}`.replace(/^Star Trek Star Trek/,"Star Trek") : `Star Trek ${it.t.replace(/, seasons.*/,"")}`;
+  return `https://tv.apple.com/us/search?term=${encodeURIComponent(q)}`;
+}
+function open(i){
+  const it = registry[i];
+  $("#sheet").style.setProperty("--c", it.era.c);
+  $("#sh-era").textContent = it.kind === "film" ? `${it.group} · ${it.era.name}` : `${it.era.name}, ${it.era.years}`;
+  $("#sh-title").textContent = it.t;
+  $("#sh-lead").textContent = it.lead ? `Led by ${it.lead}` : "";
+  let f = "";
+  if (it.kind === "show"){
+    f += `<div class="fact"><small>Seasons</small><span>${it.s}</span></div>`;
+    f += `<div class="fact"><small>Episodes</small><span>${it.e}</span></div>`;
+    f += `<div class="fact"><small>Episode length</small><span>~${it.rt} min</span></div>`;
+    f += `<div class="fact"><small>Total</small><span>~${hrs(it.e,it.rt)} h</span></div>`;
+    f += `<div class="fact"><small>Released</small><span>${it.rel}</span></div>`;
+    f += `<div class="fact"><small>Story years</small><span>${it.story}</span></div>`;
+  } else {
+    f += `<div class="fact"><small>Runtime</small><span>${it.rt} min</span></div>`;
+    f += `<div class="fact"><small>Released</small><span>${it.y}</span></div>`;
+    f += `<div class="fact"><small>Story year</small><span>${it.st}</span></div>`;
+  }
+  $("#sh-facts").innerHTML = f;
+  $("#sh-blurb").textContent = it.blurb || "";
+  $("#sh-blurb").hidden = !it.blurb;
+  $("#sh-why span").textContent = it.why || "";
+  $("#sh-why").hidden = !it.why;
+  setLink($("#lk-apple"), appleUrl(it));
+  setLink($("#lk-imdb"), it.imdb ? `https://www.imdb.com/title/${it.imdb}/` : `https://www.imdb.com/find/?q=${encodeURIComponent("Star Trek "+it.t)}`);
+  setLink($("#lk-trakt"), it.trakt ? `https://trakt.tv/${it.kind==="film"?"movies":"shows"}/${it.trakt}` : `https://trakt.tv/search?query=${encodeURIComponent(it.traktSearch || "Star Trek "+it.t)}`);
+  pop.showModal();
+  $("#close").focus();
+}
+document.addEventListener("click", e => {
+  const r = e.target.closest(".row");
+  if (r) open(+r.dataset.i);
+});
+$("#close").addEventListener("click", () => pop.close());
+$("#sheetWrap").addEventListener("click", e => { if (e.target.id === "sheetWrap") pop.close(); });
+
+let saved = null;
+try { saved = localStorage.getItem("trek-sort"); } catch(e){}
+setMode(location.hash === "#release-order" ? "release" : (saved || "story"), false);
+</script>
+</body>
+</html>
