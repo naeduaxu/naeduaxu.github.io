@@ -426,6 +426,7 @@ function setMode(m, save){
   }
 }
 document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode, true)));
+window.addEventListener("hashchange", () => setMode(location.hash === "#release-order" ? "release" : "story", false));
 
 /* ===== POPUP ===== */
 const pop = $("#pop");

@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#070b16" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Star Wars Watch Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#070b16;
+  --sheet:#0f1526;
+  --panel:#0d1322;
+  --press:#151d31;
+  --line:#1b2437;
+  --ink:#e8ecf4;
+  --ink-2:#a3adc2;
+  --ink-3:#6d7891;
+  --title:#ffd84a;
+  --backdrop:rgba(2,4,10,.72);
+  --mix:100%;
+  /* eras */
+  --hr:#e9d8a6;
+  --foj:#5aa9ff;
+  --roe:#e5534b;
+  --aor:#ff8f3c;
+  --nr:#3fc7b4;
+  --fo:#aab4c8;
+  --vis:#c49cf0;
+  --gold:#ffd84a;
+  --display:"Saira Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --text:"Source Sans 3",system-ui,-apple-system,sans-serif;
+  --gl:max(16px,env(safe-area-inset-left));
+  --gr:max(16px,env(safe-area-inset-right));
+}
+@media (prefers-color-scheme: light){
+  :root{
+    color-scheme:light;
+    --bg:#f4f5f8;
+    --sheet:#ffffff;
+    --panel:#e9ecf2;
+    --press:#dde1ea;
+    --line:#d9dde6;
+    --ink:#121722;
+    --ink-2:#4a5266;
+    --ink-3:#727b8f;
+    --title:#8a6a00;
+    --backdrop:rgba(20,25,40,.35);
+    --mix:55%;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:16px;line-height:1.4;transition:background-color .2s,color .2s}
+a{color:inherit}
+button{font:inherit;color:inherit}
+
+/* ---------- frame ---------- */
+.wrap{max-width:920px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 18px) var(--gr) calc(env(safe-area-inset-bottom) + 32px) var(--gl)}
+/* the whole timeline in miniature: one segment per era */
+.strip{display:flex;gap:3px;height:6px}
+.strip i{flex:1;background:var(--c)}
+.strip i:first-child{border-radius:3px 0 0 3px}
+.strip i:last-child{border-radius:0 3px 3px 0}
+.head{padding:22px 0 20px 22px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,7vw,58px);line-height:1;margin:0;color:var(--title);letter-spacing:.005em}
+.sub{margin:10px 0 0;color:var(--ink-2);font-size:16px;max-width:62ch}
+.sub b{color:var(--ink);font-weight:600}
+
+/* ---------- sort switch ---------- */
+.sorter{margin:0 0 16px 22px}
+.seg{display:inline-flex;border:1.5px solid var(--title);border-radius:6px;overflow:hidden}
+.seg button{font-family:var(--display);font-weight:600;font-size:16px;height:38px;padding:0 16px;white-space:nowrap;border:0;background:none;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.seg button+button{border-left:1.5px solid var(--title)}
+.seg button[aria-pressed="true"]{background:var(--title);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--ink);outline-offset:-4px}
+
+.cols{display:none}
+
+/* ---------- eras: thin rail + angled banner ---------- */
+.era{display:grid;grid-template-columns:14px 1fr;column-gap:8px;margin-top:10px}
+.era-bar{position:relative}
+.era-bar::before{content:"";position:absolute;left:5px;top:0;bottom:0;width:4px;background:var(--c);border-radius:2px 2px 0 0}
+.era-body{min-width:0}
+.era-head{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;min-height:28px;margin:0 0 12px -17px;padding:4px 28px 4px 14px;background:var(--c);color:#0a0d16;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%);border-radius:2px 0 0 2px}
+.era-head.yrs{grid-template-columns:minmax(0,1fr) auto minmax(max-content,1fr)}
+.era-head.yrs small{white-space:nowrap}
+.era-head h2{grid-column:2;text-align:center;font-family:var(--display);font-weight:700;font-size:17px;margin:0;line-height:1.1;color:#0a0d16}
+.era-head small{grid-column:3;justify-self:end;text-align:right;font-size:13px;font-weight:600;color:rgba(10,13,22,.66);line-height:1.2}
+
+/* ---------- rows ---------- */
+.row{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 4px 10px 6px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--panel)}
+.row:focus-visible{outline:2px solid var(--title);outline-offset:-2px;border-radius:4px}
+.row:active{background:var(--press)}
+.t{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.name{font-family:var(--display);font-weight:600;font-size:19px;line-height:1.15;color:var(--ink)}
+.film .name::before{content:"";display:inline-block;width:7px;height:7px;margin:0 8px 2px 0;background:var(--c);transform:rotate(45deg);vertical-align:middle}
+.lead{font-size:14px;color:var(--ink-3);white-space:nowrap}
+.tag{font-size:12px;font-weight:600;padding:1px 7px;border-radius:4px;white-space:nowrap;background:none}
+.tag.fav{--fc:color-mix(in oklab,var(--gold) var(--mix),#000);color:var(--fc);border:1px solid var(--fc)}
+.tag.skip{color:var(--ink-3);border:1px solid var(--ink-3)}
+.meta{display:flex;flex-wrap:wrap;gap:2px 14px;margin-top:3px;font-size:14px;color:var(--ink-2)}
+.meta em{font-style:normal;color:var(--ink-3)}
+.meta .rel{color:var(--ink)}
+
+.note{display:grid;grid-template-columns:14px 1fr;column-gap:8px;margin-top:26px}
+.note .era-bar::before{background:none;border-left:2px dashed var(--c);width:0;left:6px}
+.note p{margin:0 0 6px 6px;color:var(--ink-2);font-size:15px;max-width:62ch}
+.foot{margin-top:26px}
+.fine{margin:10px 0 0 22px;font-size:13px;color:var(--ink-3);max-width:70ch}
+
+/* ---------- popup ---------- */
+dialog{border:0;padding:0;background:transparent;color:var(--ink);max-width:none;max-height:none;width:100%;height:100%;margin:0}
+dialog::backdrop{background:var(--backdrop);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sheet-wrap{position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;background:var(--sheet);border-top:4px solid var(--c);border-radius:14px 14px 0 0;padding:18px var(--gr) calc(env(safe-area-inset-bottom) + 18px) var(--gl);max-height:90vh;overflow:auto;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sh-era{font-size:13px;font-weight:600;color:color-mix(in oklab,var(--c) var(--mix),#000)}
+.sh-title{font-family:var(--display);font-weight:700;font-size:29px;line-height:1.08;margin:2px 0 0;color:var(--title)}
+.sh-lead{margin-top:4px;font-size:15px;color:var(--ink-2)}
+.close{flex:none;width:36px;height:36px;border-radius:6px;border:1px solid var(--ink-3);background:none;cursor:pointer;font-size:20px;line-height:1}
+.close:focus-visible{outline:2px solid var(--title);outline-offset:2px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:14px 0 6px}
+.fact{background:var(--bg);border-radius:6px;padding:8px 10px}
+.fact small{display:block;font-size:12px;color:var(--ink-3)}
+.fact span{font-family:var(--display);font-size:19px;font-weight:600;white-space:nowrap}
+.blurb{color:var(--ink-2);font-size:15px;margin:10px 0 14px}
+.why{margin:-4px 0 14px;padding:8px 12px;border-left:3px solid var(--ink-3);background:var(--bg);border-radius:0 6px 6px 0;color:var(--ink-2);font-size:15px}
+.why b{color:var(--ink);font-weight:600}
+.links{display:grid;gap:8px}
+.lk{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:#0a0d16;font-family:var(--display);font-weight:700;font-size:19px;height:50px;padding:0 18px;border-radius:6px;background:var(--lc)}
+.lk small{font-family:var(--text);font-weight:500;font-size:13px;opacity:.75}
+.lk:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.lk.apple{--lc:var(--gold)}
+.lk.imdb{--lc:var(--hr)}
+.lk.trakt{--lc:var(--vis)}
+
+/* ---------- wide / landscape ---------- */
+@media (min-width:700px){
+  .row,.cols div{display:grid;grid-template-columns:minmax(0,1fr) 128px 74px 92px 82px;align-items:center;column-gap:12px;padding:9px 8px 9px 10px}
+  .meta{display:contents}
+  .meta>span{white-space:nowrap;font-variant-numeric:tabular-nums}
+  .meta .m-rt,.meta .m-story,.meta .m-rel{text-align:right}
+  .meta em{display:none}
+  .cols{display:grid;grid-template-columns:14px 1fr;column-gap:8px;margin-bottom:2px}
+  .cols div{padding-top:0;padding-bottom:0;font-size:12px;color:var(--ink-3)}
+  .cols div span:nth-child(n+3){text-align:right}
+  .sheet-wrap{align-items:center}
+  .sheet{border-radius:12px;border-top:0;border-left:6px solid var(--c);padding:22px 24px 24px}
+}
+@media (min-width:700px) and (max-height:500px){
+  .sheet{max-width:720px}
+  .links{grid-template-columns:repeat(3,1fr)}
+  .lk{flex-direction:column;justify-content:center;gap:0;height:58px;padding:0 10px}
+  .facts{margin:10px 0 8px;grid-template-columns:repeat(auto-fit,minmax(88px,1fr))}
+  .fact span{font-size:17px}
+  .blurb{display:none}
+}
+@media (max-width:699px){
+  .meta>span:empty{display:none}
+  .seg button{font-size:15px;padding:0 12px}
+}
+@media (max-width:380px){
+  .head,.sorter,.fine{padding-left:0;margin-left:0}
+  .seg button{padding:0 10px;font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="strip" id="stripTop" aria-hidden="true"></div>
+    <div class="head">
+      <h1>Star Wars watch guide</h1>
+      <p class="sub">Every series and film, in story or release order. Story years count from the Battle of Yavin in A New Hope: <b>BBY</b> is before it, <b>ABY</b> after. Tap any title for IMDb, Trakt, or to open it in the Apple TV app.</p>
+    </div>
+  </header>
+
+  <div class="sorter">
+    <div class="seg" role="group" aria-label="Sort order">
+      <button type="button" data-mode="story" aria-pressed="true">Story order</button>
+      <button type="button" data-mode="release" aria-pressed="false">Release order</button>
+    </div>
+  </div>
+
+  <div class="cols" aria-hidden="true"><span></span><div><span>Title</span><span>Seasons, episodes</span><span>Length</span><span>Story</span><span>Released</span></div></div>
+
+  <main id="timeline"></main>
+
+  <section class="note" id="alt"></section>
+
+  <footer class="foot">
+    <div class="strip" id="stripBot" aria-hidden="true"></div>
+    <p class="fine">Runtimes are typical episode lengths; total hours are approximate. Era names follow Lucasfilm's official timeline. Leaves out the LEGO specials, the 1978 Holiday Special and the 1980s Ewoks and Droids spin-offs, which sit outside the current canon.</p>
+  </footer>
+</div>
+
+<dialog id="pop" aria-labelledby="sh-title">
+  <div class="sheet-wrap" id="sheetWrap">
+    <div class="sheet" id="sheet">
+      <div class="sh-top">
+        <div><div class="sh-era" id="sh-era"></div><h3 class="sh-title" id="sh-title"></h3><div class="sh-lead" id="sh-lead"></div></div>
+        <button class="close" id="close" aria-label="Close">×</button>
+      </div>
+      <div class="facts" id="sh-facts"></div>
+      <p class="blurb" id="sh-blurb"></p>
+      <p class="why" id="sh-why"><b>Often skipped.</b> <span></span></p>
+      <div class="links">
+        <a class="lk apple" id="lk-apple" target="_blank" rel="noopener">Apple TV <small>Open in TV app</small></a>
+        <a class="lk imdb" id="lk-imdb" target="_blank" rel="noopener">IMDb <small>Ratings, cast</small></a>
+        <a class="lk trakt" id="lk-trakt" target="_blank" rel="noopener">Trakt <small>Track progress</small></a>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* ===== DATA =====
+   kind "show": s seasons, e episodes, rt typical episode minutes, rel "YYYY–YY"
+   kind "film": rt minutes, y release year
+   rm = release month, only used to order titles released the same year */
+const ERAS = [
+  {id:"e1", name:"The High Republic", years:"c. 230–130 BBY", c:"var(--hr)", items:[
+    {kind:"show", t:"Young Jedi Adventures", lead:"Kai Brightstar", story:"c. 230 BBY", rel:"2023–25", s:3, e:55, rt:24, rm:5,
+     blurb:"Animated adventures of Jedi younglings, made for preschoolers.", skip:true,
+     why:"Made for preschoolers. Charming, but nothing else depends on it.",
+     imdb:"tt20674124", trakt:"star-wars-young-jedi-adventures", apple:"https://tv.apple.com/us/show/star-wars-young-jedi-adventures/umc.cmc.6qv61jetl7t1zaqvgnwb26rg7"},
+    {kind:"show", t:"The Acolyte", lead:"Osha Aniseya", story:"132 BBY", rel:"2024", s:1, e:8, rt:38, rm:6,
+     blurb:"A murder mystery among the Jedi, a century before the prequels.", skip:true,
+     why:"Divisive with fans, and canceled after one season with its story left unresolved.",
+     imdb:"tt12262202", trakt:"the-acolyte", apple:"https://tv.apple.com/us/show/the-acolyte/umc.cmc.1alhul5mqpcim20csyvmtv463"}
+  ]},
+  {id:"e2", name:"Fall of the Jedi", years:"68–19 BBY", c:"var(--foj)", items:[
+    {kind:"show", t:"Tales of the Jedi", lead:"Ahsoka Tano, Count Dooku", story:"68–18 BBY", rel:"2022", s:1, e:6, rt:16, rm:10,
+     blurb:"Six animated shorts: Dooku's slide to the dark side and Ahsoka's early life.",
+     imdb:"tt20723374", trakt:"star-wars-tales-of-the-jedi", apple:"https://tv.apple.com/us/show/tales-of-the-jedi/umc.cmc.1y1hxdvwg6ns4vitsodf4wnd3"},
+    {kind:"film", t:"Episode I: The Phantom Menace", lead:"Qui-Gon Jinn", story:"32 BBY", y:1999, rt:134,
+     blurb:"Two Jedi find a gifted boy named Anakin Skywalker on a desert planet.",
+     imdb:"tt0120915", trakt:"star-wars-episode-i-the-phantom-menace-1999", apple:"https://tv.apple.com/us/movie/star-wars-the-phantom-menace/umc.cmc.1x8mput5lh4l0u6vue0hbmhs3"},
+    {kind:"film", t:"Episode II: Attack of the Clones", lead:"Anakin Skywalker", story:"22 BBY", y:2002, rt:142,
+     blurb:"Anakin as a young Jedi, a forbidden romance, and the start of the Clone Wars.",
+     imdb:"tt0121765", trakt:"star-wars-episode-ii-attack-of-the-clones-2002", apple:"https://tv.apple.com/us/movie/star-wars-attack-of-the-clones/umc.cmc.27tj6w4r4fpeziazh0cyza2bq"},
+    {kind:"film", t:"The Clone Wars (film)", lead:"Anakin Skywalker, Ahsoka Tano", story:"22 BBY", y:2008, rt:98, skip:true,
+     blurb:"Animated film that launched the series and introduced Ahsoka.",
+     why:"Built from what were planned as the series' first episodes. The show covers the same ground better.",
+     imdb:"tt1185834", trakt:"star-wars-the-clone-wars-2008", apple:"https://tv.apple.com/us/movie/star-wars-the-clone-wars/umc.cmc.2zw9bmbdx1b3s0rfixi51s020"},
+    {kind:"show", t:"The Clone Wars", lead:"Anakin Skywalker, Ahsoka Tano", story:"22–19 BBY", rel:"2008–20", s:7, e:133, rt:22, fav:true,
+     blurb:"The war between the prequel films, episode by episode. Uneven early on; brilliant at its best.",
+     imdb:"tt0458290", trakt:"star-wars-the-clone-wars", apple:"https://tv.apple.com/us/show/star-wars-the-clone-wars/umc.cmc.pipey73n3wfe96uwbg7eunec"},
+    {kind:"film", t:"Episode III: Revenge of the Sith", lead:"Anakin Skywalker", story:"19 BBY", y:2005, rt:140,
+     blurb:"The Republic falls, the Jedi are betrayed, and Anakin becomes Darth Vader.",
+     imdb:"tt0121766", trakt:"star-wars-episode-iii-revenge-of-the-sith-2005", apple:"https://tv.apple.com/us/movie/star-wars-revenge-of-the-sith/umc.cmc.5nolvqgurfe17eln52s0b7j6j"}
+  ]},
+  {id:"e3", name:"Reign of the Empire", years:"19–0 BBY", c:"var(--roe)", items:[
+    {kind:"show", t:"The Bad Batch", lead:"Hunter, Omega", story:"19–18 BBY", rel:"2021–24", s:3, e:47, rt:28,
+     blurb:"A squad of defective clones on the run in the Empire's first days.",
+     imdb:"tt12708542", trakt:"star-wars-the-bad-batch", apple:"https://tv.apple.com/us/show/star-wars-the-bad-batch/umc.cmc.jzpcwzmyd6h9eaadrakph6ta"},
+    {kind:"show", t:"Tales of the Empire", lead:"Morgan Elsbeth, Barriss Offee", story:"from 19 BBY", rel:"2024", s:1, e:6, rt:15, rm:5,
+     blurb:"Six animated shorts about two women shaped by the Empire.",
+     imdb:"tt32019314", trakt:"star-wars-tales-of-the-empire", apple:"https://tv.apple.com/us/show/star-wars-tales-of-the-empire/umc.cmc.y5p36q221fqcd9792z4tmkef"},
+    {kind:"show", t:"Tales of the Underworld", lead:"Asajj Ventress, Cad Bane", story:"various", rel:"2025", s:1, e:6, rt:15, rm:5,
+     blurb:"Six animated shorts following two Clone Wars outlaws.",
+     imdb:"tt36414431", trakt:"star-wars-tales-of-the-underworld", apple:"https://tv.apple.com/us/show/star-wars-tales-of-the-underworld/umc.cmc.33dl8owginjayc18l10f2uywx"},
+    {kind:"show", t:"Maul: Shadow Lord", lead:"Maul", story:"c. 18 BBY", rel:"2026", s:1, e:10, rt:25, rm:4,
+     blurb:"Animated: the former Sith apprentice builds a criminal empire in the Empire's early years. Season 2 is due in 2027.",
+     imdb:"tt36594331", trakt:"star-wars-maul-shadow-lord", apple:"https://tv.apple.com/us/show/star-wars-maul---shadow-lord/umc.cmc.13e9ucuyawm76x5y4pt6qbo61"},
+    {kind:"film", t:"Solo", lead:"Han Solo", story:"13–10 BBY", y:2018, rt:135,
+     blurb:"Young Han meets Chewbacca and Lando and makes the Kessel Run.",
+     imdb:"tt3778644", trakt:"solo-a-star-wars-story-2018", apple:"https://tv.apple.com/us/movie/solo-a-star-wars-story/umc.cmc.1skhjjrps93jxwc8w45mc4yyj"},
+    {kind:"show", t:"Obi-Wan Kenobi", lead:"Obi-Wan Kenobi", story:"9 BBY", rel:"2022", s:1, e:6, rt:45, rm:5,
+     blurb:"Ten years after Revenge of the Sith, a hiding Obi-Wan is drawn back out.",
+     imdb:"tt8466564", trakt:"obi-wan-kenobi", apple:"https://tv.apple.com/us/show/obi-wan-kenobi/umc.cmc.51g7j105zle8xrq45i2tz4b6t"},
+    {kind:"show", t:"Andor", lead:"Cassian Andor", story:"5–0 BBY", rel:"2022–25", s:2, e:24, rt:48, rm:9, fav:true,
+     blurb:"How an ordinary thief becomes a rebel. A slow-burn political thriller, and many fans' favorite Star Wars of all.",
+     imdb:"tt9253284", trakt:"star-wars-andor", apple:"https://tv.apple.com/us/show/andor/umc.cmc.4kyytz4f3hjg64m73887nybli"},
+    {kind:"show", t:"Rebels", lead:"Ezra Bridger", story:"5–0 BBY", rel:"2014–18", s:4, e:75, rt:22,
+     blurb:"A ragtag crew and a street kid with the Force in the early Rebellion. Gets much better after season 1.",
+     imdb:"tt2930604", trakt:"star-wars-rebels", apple:"https://tv.apple.com/us/show/star-wars-rebels/umc.cmc.29znoughk8bnj2ud456pge0zu"},
+    {kind:"film", t:"Rogue One", lead:"Jyn Erso", story:"0 BBY", y:2016, rt:134, fav:true,
+     blurb:"The mission to steal the Death Star plans, leading straight into A New Hope.",
+     imdb:"tt3748528", trakt:"rogue-one-a-star-wars-story-2016", apple:"https://tv.apple.com/us/movie/rogue-one-a-star-wars-story/umc.cmc.5ydra856u0y2hc1ur13qd4xxx"}
+  ]},
+  {id:"e4", name:"Age of Rebellion", years:"0–4 ABY", c:"var(--aor)", items:[
+    {kind:"film", t:"Episode IV: A New Hope", lead:"Luke Skywalker", story:"0 BBY", y:1977, rt:121,
+     blurb:"The original: a farm boy, a princess, a smuggler and the Death Star.",
+     imdb:"tt0076759", trakt:"star-wars-1977", apple:"https://tv.apple.com/us/movie/star-wars-a-new-hope/umc.cmc.2o65qvudvwq1l1rqjlbyfszwn"},
+    {kind:"film", t:"Episode V: The Empire Strikes Back", lead:"Luke Skywalker", story:"3 ABY", y:1980, rt:124, fav:true,
+     blurb:"The Empire hits back. Widely considered the best Star Wars film.",
+     imdb:"tt0080684", trakt:"the-empire-strikes-back-1980", apple:"https://tv.apple.com/us/movie/star-wars-the-empire-strikes-back/umc.cmc.3vabzkcmuoxxm3r3ng9q4rgh9"},
+    {kind:"film", t:"Episode VI: Return of the Jedi", lead:"Luke Skywalker", story:"4 ABY", y:1983, rt:132,
+     blurb:"Luke confronts Vader and the Emperor; the Rebellion makes its last stand.",
+     imdb:"tt0086190", trakt:"return-of-the-jedi-1983", apple:"https://tv.apple.com/us/movie/star-wars-return-of-the-jedi/umc.cmc.3ggalukb7xb5pf1gfgdlwkcx"}
+  ]},
+  {id:"e5", name:"The New Republic", years:"9–11 ABY", c:"var(--nr)", items:[
+    {kind:"show", t:"The Mandalorian", lead:"Din Djarin", story:"9 ABY", rel:"2019–23", s:3, e:24, rt:38, rm:11, fav:true,
+     blurb:"A lone bounty hunter and a foundling child after the fall of the Empire.",
+     imdb:"tt8111088", trakt:"the-mandalorian", apple:"https://tv.apple.com/us/show/the-mandalorian/umc.cmc.29ma7mt4pkylvupky2kt7cbu3"},
+    {kind:"show", t:"The Book of Boba Fett", lead:"Boba Fett", story:"9 ABY", rel:"2021–22", s:1, e:7, rt:45, rm:12, skip:true,
+     blurb:"Boba Fett tries to rule Jabba's old criminal empire.",
+     why:"Mixed reception. But chapters 5 and 6 are effectively Mandalorian episodes, so watch those before Mandalorian season 3.",
+     imdb:"tt13668894", trakt:"the-book-of-boba-fett", apple:"https://tv.apple.com/us/show/the-book-of-boba-fett/umc.cmc.1xs3rjhar8ecbcvuzmwzrkn9a"},
+    {kind:"show", t:"Skeleton Crew", lead:"Wim, Jod Na Nawood", story:"9 ABY", rel:"2024–25", s:1, e:8, rt:35, rm:12,
+     blurb:"Four kids lost in the galaxy, in the spirit of an '80s adventure movie.",
+     imdb:"tt20600980", trakt:"star-wars-skeleton-crew", apple:"https://tv.apple.com/us/show/star-wars-skeleton-crew/umc.cmc.5ghcxs1o9kkx2jhvcuf0xsqwr"},
+    {kind:"show", t:"Ahsoka", lead:"Ahsoka Tano", story:"11 ABY", rel:"2023", s:1, e:8, rt:45, rm:8,
+     blurb:"Ahsoka hunts for a lost Imperial admiral. Plays as a direct sequel to Rebels. Season 2 is due in January 2027.",
+     imdb:"tt13622776", trakt:"ahsoka", apple:"https://tv.apple.com/us/show/ahsoka/umc.cmc.xyg7ow1z2rclag9hsewhqdls"},
+    {kind:"film", t:"The Mandalorian and Grogu", lead:"Din Djarin", story:"c. 9–10 ABY", y:2026, rm:5, rt:132,
+     blurb:"Din Djarin and Grogu's first big-screen adventure, picking up after Mandalorian season 3. Its exact year is unofficial.",
+     imdb:"tt30825738", trakt:null, apple:"https://tv.apple.com/us/movie/star-wars-the-mandalorian-and-grogu/umc.cmc.31m58rsmdk9f165zgt7vawkxk"}
+  ]},
+  {id:"e6", name:"Rise of the First Order", years:"34–35 ABY", c:"var(--fo)", items:[
+    {kind:"show", t:"Resistance", lead:"Kazuda Xiono", story:"34 ABY", rel:"2018–20", s:2, e:40, rt:22, skip:true,
+     blurb:"Animated: a young pilot spies on the First Order from an ocean refueling station.",
+     why:"A lighter, kid-focused show with little bearing on the films.",
+     imdb:"tt8336340", trakt:"star-wars-resistance", apple:"https://tv.apple.com/us/show/star-wars-resistance/umc.cmc.395bn3h2p28luigbpddyd79w6"},
+    {kind:"film", t:"Episode VII: The Force Awakens", lead:"Rey", story:"34 ABY", y:2015, rt:138,
+     blurb:"Thirty years after Return of the Jedi, a scavenger and a defecting stormtrooper join the fight.",
+     imdb:"tt2488496", trakt:"star-wars-the-force-awakens-2015", apple:"https://tv.apple.com/us/movie/star-wars-the-force-awakens/umc.cmc.61i3yveu7xby4chfkqved19ka"},
+    {kind:"film", t:"Episode VIII: The Last Jedi", lead:"Rey", story:"34 ABY", y:2017, rt:152,
+     blurb:"Rey seeks out Luke Skywalker while the Resistance is hunted.",
+     imdb:"tt2527336", trakt:"star-wars-the-last-jedi-2017", apple:"https://tv.apple.com/us/movie/star-wars-the-last-jedi/umc.cmc.7f19yhpg0i8vk8of1ydhs7g1v"},
+    {kind:"film", t:"Episode IX: The Rise of Skywalker", lead:"Rey", story:"35 ABY", y:2019, rt:141, rm:12,
+     blurb:"The final chapter of the Skywalker saga.",
+     imdb:"tt2527338", trakt:"star-wars-the-rise-of-skywalker-2019", apple:"https://tv.apple.com/us/movie/star-wars-the-rise-of-skywalker/umc.cmc.71hlilqgd8utz8c4nlpl6ol7m"}
+  ]}
+];
+const ALT = {name:"Outside the timeline", c:"var(--vis)",
+  note:"Visions is an anthology of animated shorts by studios around the world, each its own take on Star Wars outside the main story. The Ninth Jedi grew out of one of them.",
+  items:[
+    {kind:"show", t:"Visions", lead:"Anthology", story:"—", rel:"2021–25", s:3, e:27, rt:15, rm:9, unit:"volume",
+     blurb:"Self-contained animated shorts, many from Japanese anime studios.",
+     imdb:"tt13622982", trakt:"star-wars-visions", apple:"https://tv.apple.com/us/show/star-wars-visions/umc.cmc.1zwnzy1w66okm7kb1f7q073vs"},
+    {kind:"show", t:"Visions Presents: The Ninth Jedi", lead:"Kara", story:"—", rel:"2026", s:1, e:8, rt:28, rm:8,
+     blurb:"A full series expanding one of the most popular Visions shorts.",
+     imdb:"tt43337681", trakt:null, apple:"https://tv.apple.com/us/show/star-wars-visions-presents---the-ninth-jedi/umc.cmc.70slqy3zl5r21xorkab29kdvd"}
+  ]};
+
+/* ===== RENDER ===== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const hrs = (e, rt) => Math.round(e * rt / 60);
+const fmtMin = m => m ? `${Math.floor(m/60)} h ${m%60} min` : "—";
+const plural = (n, w) => `${n} ${w}${n===1?"":"s"}`;
+const registry = [];
+
+function tags(it){
+  let h = "";
+  if (it.fav) h += `<span class="tag fav">Fan favorite</span>`;
+  if (it.skip) h += `<span class="tag skip">Often skipped</span>`;
+  return h;
+}
+function row(it, era){
+  const i = registry.push({...it, era}) - 1;
+  const head = `<button class="row ${it.kind}" data-i="${i}" style="--c:${era.c}">
+    <span class="t"><span class="name">${esc(it.t)}</span><span class="lead">${esc(it.lead)}</span>${tags(it)}</span>
+    <span class="meta">`;
+  if (it.kind === "show") return head + `
+      <span class="m-eps">${plural(it.s, it.unit||"season")}, ${it.e} eps</span>
+      <span class="m-rt">~${it.rt} min<em> each, ~${hrs(it.e,it.rt)} h total</em></span>
+      <span class="m-story"><em>Story </em>${it.story}</span>
+      <span class="m-rel rel"><em>Released </em>${it.rel}</span>
+    </span></button>`;
+  return head + `
+      <span class="m-eps">Movie</span>
+      <span class="m-rt">${fmtMin(it.rt)}</span>
+      <span class="m-story"><em>Story </em>${it.story}</span>
+      <span class="m-rel rel"><em>Released </em>${it.y}</span>
+    </span></button>`;
+}
+function section(id, c, title, small, yrs, rows){
+  return `<section class="era" style="--c:${c}" aria-labelledby="${id}">
+    <div class="era-bar" aria-hidden="true"></div>
+    <div class="era-body"><div class="era-head${yrs?" yrs":""}"><h2 id="${id}">${esc(title)}</h2><small>${esc(small)}</small></div>${rows}</div></section>`;
+}
+function strips(){
+  const h = ERAS.map(e => `<i style="--c:${e.c}"></i>`).join("");
+  $("#stripTop").innerHTML = h; $("#stripBot").innerHTML = h;
+}
+
+const DECADES = {
+  1970:["Where it began","var(--aor)"], 1980:["The original trilogy completes","var(--hr)"],
+  1990:["The prequels begin","var(--foj)"], 2000:["Prequels and The Clone Wars","var(--vis)"],
+  2010:["Disney's sequels and spin-offs","var(--roe)"], 2020:["The streaming era","var(--nr)"]
+};
+const relKey = x => (x.kind === "film" ? x.y : parseInt(x.rel)) + (x.rm||6)/13;
+
+let mode = "story";
+function render(){
+  registry.length = 0;
+  if (mode === "release") return renderRelease();
+  let h = "";
+  for (const era of ERAS) h += section(era.id, era.c, era.name, era.years, true, era.items.map(it => row(it, era)).join(""));
+  $("#timeline").innerHTML = h;
+  const a = `<div class="era-bar" aria-hidden="true"></div><div class="era-body">
+    <div class="era-head"><h2>${ALT.name}</h2><small>not canon</small></div>
+    <p>${esc(ALT.note)}</p>${ALT.items.map(it => row(it, ALT)).join("")}</div>`;
+  $("#alt").style.setProperty("--c", ALT.c);
+  $("#alt").innerHTML = a;
+  $("#alt").hidden = false;
+}
+function renderRelease(){
+  const all = [];
+  for (const era of ERAS) for (const it of era.items) all.push({it, era});
+  for (const it of ALT.items) all.push({it, era:ALT});
+  all.sort((a,b) => relKey(a.it) - relKey(b.it));
+  let h = "", cur = null, rows = "";
+  const flush = () => { if (cur !== null){ const [d,c] = DECADES[cur]; h += section("d"+cur, c, cur+"s", d, false, rows); } };
+  for (const x of all){
+    const dec = Math.floor(relKey(x.it)/10)*10;
+    if (dec !== cur){ flush(); cur = dec; rows = ""; }
+    rows += row(x.it, x.era);
+  }
+  flush();
+  $("#timeline").innerHTML = h;
+  $("#alt").hidden = true;
+}
+function setMode(m, save){
+  mode = m === "release" ? "release" : "story";
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+  render();
+  if (save){
+    try { localStorage.setItem("wars-sort", mode); } catch(e){}
+    history.replaceState(null, "", mode === "release" ? "#release-order" : location.pathname + location.search);
+  }
+}
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode, true)));
+window.addEventListener("hashchange", () => setMode(location.hash === "#release-order" ? "release" : "story", false));
+
+/* ===== POPUP ===== */
+const pop = $("#pop");
+const searchName = it => "Star Wars " + it.t.replace(/^Episode [IVX]+: /,"");
+function open(i){
+  const it = registry[i];
+  $("#sheet").style.setProperty("--c", it.era.c);
+  $("#sh-era").textContent = `${it.era.name}${it.era.years ? ", " + it.era.years : ""}`;
+  $("#sh-title").textContent = it.t;
+  $("#sh-lead").textContent = it.lead && it.lead !== "Anthology" ? `Led by ${it.lead}` : "";
+  let f = "";
+  if (it.kind === "show"){
+    f += `<div class="fact"><small>${it.unit ? "Volumes" : "Seasons"}</small><span>${it.s}</span></div>`;
+    f += `<div class="fact"><small>Episodes</small><span>${it.e}</span></div>`;
+    f += `<div class="fact"><small>Episode length</small><span>~${it.rt} min</span></div>`;
+    f += `<div class="fact"><small>Total</small><span>~${hrs(it.e,it.rt)} h</span></div>`;
+    f += `<div class="fact"><small>Released</small><span>${it.rel}</span></div>`;
+    f += `<div class="fact"><small>Story years</small><span>${it.story}</span></div>`;
+  } else {
+    f += `<div class="fact"><small>Runtime</small><span>${it.rt ? it.rt + " min" : "—"}</span></div>`;
+    f += `<div class="fact"><small>Released</small><span>${it.y}</span></div>`;
+    f += `<div class="fact"><small>Story year</small><span>${it.story}</span></div>`;
+  }
+  $("#sh-facts").innerHTML = f;
+  $("#sh-blurb").textContent = it.blurb || "";
+  $("#sh-blurb").hidden = !it.blurb;
+  $("#sh-why span").textContent = it.why || "";
+  $("#sh-why").hidden = !it.why;
+  $("#lk-apple").href = it.apple || `https://tv.apple.com/us/search?term=${encodeURIComponent(searchName(it))}`;
+  $("#lk-imdb").href = it.imdb ? `https://www.imdb.com/title/${it.imdb}/` : `https://www.imdb.com/find/?q=${encodeURIComponent(searchName(it))}`;
+  $("#lk-trakt").href = it.trakt ? `https://trakt.tv/${it.kind==="film"?"movies":"shows"}/${it.trakt}` : `https://trakt.tv/search?query=${encodeURIComponent(searchName(it))}`;
+  pop.showModal();
+  $("#close").focus();
+}
+document.addEventListener("click", e => {
+  const r = e.target.closest(".row");
+  if (r) open(+r.dataset.i);
+});
+$("#close").addEventListener("click", () => pop.close());
+$("#sheetWrap").addEventListener("click", e => { if (e.target.id === "sheetWrap") pop.close(); });
+
+strips();
+let saved = null;
+try { saved = localStorage.getItem("wars-sort"); } catch(e){}
+setMode(location.hash === "#release-order" ? "release" : (saved || "story"), false);
+</script>
+</body>
+</html>
